@@ -29,19 +29,19 @@
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link" href="#"><i class="bi bi-cart-fill"></i></a>
+                <a class="nav-link" href="#"><i class="bi bi-cart3"></i></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{route('admin.produit.index')}}">Produits</a>
+                <a class="nav-link btn btn-light" href="{{route('admin.produit.index')}}">Produits</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{route('admin.option.index')}}">Options</a>
+                <a class="nav-link btn btn-light" href="{{route('admin.option.index')}}">Options</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{route('admin.utilisateur.index')}}">Utilisateurs</a>
+                <a class="nav-link btn btn-light" href="{{route('admin.utilisateur.index')}}">Utilisateurs</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Commandes</a>
+                <a class="nav-link btn btn-light" href="#">Commandes</a>
               </li>
               <li class="nav-item">
                     @auth

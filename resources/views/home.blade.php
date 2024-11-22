@@ -30,12 +30,12 @@
                 <h5 class="card-title">{{$produit->nom}}</h5>
                 <p class="card-text">{{$produit->prix_unitaire}}</p>
                 <div
-                  class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto"
+                  class=" d-flex align-items-end pt-3 px-0 pb-0 mt-auto"
                 >
-                  <a href="#!" class="btn btn-primary me-1"
+                  <a href="{{route('addCart', $produit->id)}}" class="btn btn-secondary me-1"
                     ><i class="bi bi-cart-plus"></i></a
                   >
-                  <a href="{{route('produit.show', $produit->id)}}" class="btn btn-primary shadow-0 me-1"
+                  <a href="{{route('produit.show', $produit->id)}}" class="btn btn-secondary shadow-0 me-1"
                     ><i class="bi bi-eye"></i></a
                   >
                 </div>

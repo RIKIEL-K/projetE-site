@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="">
-    <h1 class="mb-3 fs-0" style="font-size:1.5em;">Modifier une option</h1>
+    {{-- <h1 class="mb-3 fs-0" style="font-size:1.5em;">Modifier une option</h1> --}}
 </div>
 <form action="{{route('admin.option.update', $option->id)}}" method="POST">
     @csrf
@@ -21,7 +21,7 @@
           </div>
         </div>
       </div>
-      <button  type="submit" class="btn btn-primary btn-block mb-4">Modifier</button>
+      <button  type="submit" class="btn btn-primary btn-block mb-4">Modifier l'option</button>
 
       </div>
     </div>

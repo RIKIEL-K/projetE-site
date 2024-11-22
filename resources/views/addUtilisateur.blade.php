@@ -2,7 +2,7 @@
 @section('title','Ajouter un utilisateur');
 @section('content')
 <div class="">
-    <h1 class="text-uppercase mb-3 fs-0" style="font-size:1.5em;">Ajouter un utilisateur</h1>
+    {{-- <h1 class="text-uppercase mb-3 fs-0" style="font-size:1.5em;">Ajouter un utilisateur</h1> --}}
 </div>
 <form action="{{route('admin.utilisateur.store')}}" method="POST">
     @csrf
@@ -85,7 +85,7 @@
     </div>
 
 
-      <button  type="submit" class="btn btn-primary btn-block mb-4">Enregistrer</button>
+      <button  type="submit" class="btn btn-primary btn-block mb-4">Ajouter l'utilisateur</button>
 
       </div>
     </div>

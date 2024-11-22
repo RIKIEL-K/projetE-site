@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Produit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -12,9 +13,20 @@ class HomeController extends Controller
      */
     public function index()
     {
+
         $produits = Produit::all();
-        return view('home',data: [
-            'produits'=>$produits
+
+        // Récupérer le panier depuis la session
+        $cart = Session::get('cart', []);
+
+        // Calculer le nombre total d'articles dans le panier
+        $cartCount = array_reduce($cart, function ($count, $item) {
+            return $count + $item['qte'];
+        }, 0);
+
+        return view('home', data: [
+            'produits' => $produits,
+            'cartCount' => $cartCount
         ]);
     }
 

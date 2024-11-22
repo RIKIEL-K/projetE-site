@@ -29,10 +29,20 @@
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link" href="#"><i class="bi bi-cart-fill"></i></a>
+                <a href="{{ route('cart.view') }}" class="btn btn-light position-relative nav-link">
+                    <i class="bi bi-cart3"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill {{ $cartCount > 0 ? 'bg-danger' : 'bg-primary' }} ">
+                        @if($cartCount > 0)
+                            {{ $cartCount }}
+                         @else
+                            0
+                        @endif
+
+                    </span>
+                </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/">Les Produits</a>
+                <a class="nav-link btn btn-light" href="/">Nos produits</a>
               </li>
             </ul>
           </div>
@@ -40,7 +50,7 @@
       </nav>
         <div class="container">
             @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
                 {{session('success')}}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>
@@ -51,12 +61,13 @@
             @yield('content')
         </div>
     <!--footer-->
-     <footer class="py-5 bg-dark">
+     {{-- <footer class="py-5 bg-dark">
       <div class="container">
         <p class="m-0 text-center text-white">
           Copyright &copy; Your Website 2023
         </p>
       </div>
-    </footer>
+    </footer> --}}
   </body>
 </html>
+

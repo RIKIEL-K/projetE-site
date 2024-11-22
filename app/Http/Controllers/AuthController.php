@@ -28,6 +28,15 @@ class AuthController extends Controller
         return to_route('login')->with('success','déconnexion reussi');
     }
     public function login(){
+        // Exemple de création d'un utilisateur
+            // User::create([
+            //     'nom' => 'admin',
+            //     'prenom' => 'admin',
+            //     'email' => 'admin@admin.com',
+            //     'password' => Hash::make('admin12345'),
+            //     'telephone' => '123456789',
+            //     'date_naissance' => '1990-01-01',
+            // ]);
 
         return view ('connexion');
     }

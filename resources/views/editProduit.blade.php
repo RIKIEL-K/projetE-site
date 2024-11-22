@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="">
-    <h1 class="mb-3 fs-0" style="font-size:1.5em;">Modifier un produit</h1>
+    {{-- <h1 class="mb-3 fs-0" style="font-size:1.5em;">Modifier un produit</h1> --}}
 </div>
 <form action="{{route('admin.produit.update', $produit->id)}}" method="POST">
     @csrf
@@ -81,7 +81,7 @@
         @enderror
     </div>
 
-      <button  type="submit" class="btn btn-primary btn-block mb-4">Modifier</button>
+      <button  type="submit" class="btn btn-primary btn-block mb-4">Modifier le produit</button>
 
     </div>
     </div>
