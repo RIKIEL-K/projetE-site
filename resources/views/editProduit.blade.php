@@ -4,7 +4,7 @@
 <div class="">
     {{-- <h1 class="mb-3 fs-0" style="font-size:1.5em;">Modifier un produit</h1> --}}
 </div>
-<form action="{{route('admin.produit.update', $produit->id)}}" method="POST">
+<form action="{{route('admin.produit.update', $produit->id)}}" method="POST" enctype="multipart/form-data">
     @csrf
     @method("PUT")
     <div class="container w-50">
@@ -51,6 +51,19 @@
         </label>
     </div>
 
+        {{-- Section pour l'image --}}
+        <div class="form-outline mb-4">
+            <label for="image" class="form-label">Image :</label>
+            <input type="file" class="form-control" name="images" id="image" accept="image/*" />
+            @if ($produit->image)
+                <div class="mt-2">
+                    <img src="{{ asset('storage/' . $produit->image->image_path) }}" alt="Image actuelle" style="width: 100px; height: 100px; object-fit: cover;">
+                </div>
+            @endif
+            @error('images')
+            <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
 
       <div class="form-check form-switch mb-4">
         <input

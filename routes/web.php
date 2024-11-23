@@ -29,3 +29,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/pay', [CartController::class, 'pay'])->name('cart.pay');
     Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
 });
+
+

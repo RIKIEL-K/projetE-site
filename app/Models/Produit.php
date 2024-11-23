@@ -16,4 +16,11 @@ class Produit extends Model
     public function option(){
         return $this->belongsToMany(Option::class);
     }
+     /**
+     * Relation avec les images.
+     */
+    public function image()
+    {
+        return $this->hasOne(Image::class);
+    }
 }

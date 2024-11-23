@@ -4,7 +4,7 @@
 <div class="">
     {{-- <h1 class="mb-3 fs-0" style="font-size:1.5em;">Ajouter un produit</h1> --}}
 </div>
-<form action="{{route('admin.produit.store')}}" method="POST">
+<form action="{{route('admin.produit.store')}}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="container w-50">
      <div class="row mb-4">
@@ -48,6 +48,10 @@
             @enderror
         </label>
       </div>
+      <div>
+        {{-- <label for="images">Images :</label> --}}
+        <input type="file" class="form-control" name="images" id="images" multiple>
+    </div>
       <div class="form-check form-switch mb-4">
         <input
             class="form-check-input"

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Produit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class ListingController extends Controller
 {
@@ -36,13 +37,23 @@ class ListingController extends Controller
      */
     public function show(string $id)
     {
-        $produit = Produit::with('option')->findOrFail($id);
+        $produit = Produit::with('option','image')->findOrFail($id);
+
+        $imagePath = $produit->image ? asset('storage/' . $produit->image->image_path) : asset('images/no-image.png');
+          // Récupérer le panier depuis la session
+          $cart = Session::get('cart', []);
+
+          $cartCount = array_reduce($cart, function ($count, $item) {
+              return $count + $item['qte'];
+          }, 0);
 
         if (!$produit) {
             return redirect()->route('/')->with('error', "Produit non trouvé");
         }
         return view ('monProduit',[
-            'produit'=>$produit
+            'produit'=>$produit,
+            'cartCount'=>$cartCount,
+            'imagePath'=>$imagePath
         ]);
     }
 

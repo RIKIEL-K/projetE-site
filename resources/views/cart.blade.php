@@ -12,7 +12,7 @@
                         @foreach($cart as $id => $item)
                         <div class="row gy-3 mb-4 align-items-center">
                             <div class="col-3">
-                                <img src="" class="border rounded me-3" style="width: 96px; height: 96px" />
+                                <img src="{{$item['image']}}" class="border rounded me-3" style="width: 96px; height: 96px" />
                                 <p>{{ $item['name'] }}</p>
                             </div>
                             <div class="col-3">

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
-     // Afficher le contenu du panier
+
      public function viewCart()
      {
         $cart = Session::get('cart', []);
@@ -25,12 +25,15 @@ class CartController extends Controller
         return view('cart', compact('cart', 'total','cartCount'));
      }
 
-     // Ajouter un produit au panier
+
     public function addToCart($id)
     {
         $produit = Produit::findOrFail($id); // Vérifier si le produit existe
 
         $cart = Session::get('cart', []); // Récupérer le panier actuel
+
+        // Définir une image par défaut si l'image du produit n'existe pas
+        $imagePath = $produit->image ? asset('storage/' . $produit->image->image_path) : asset('images/no-image.png');
 
         if (isset($cart[$id])) {
             $cart[$id]['qte'] += 1; // Augmenter la quantité
@@ -39,15 +42,15 @@ class CartController extends Controller
                 'name' => $produit->nom,
                 'prix' => $produit->prix_unitaire,
                 'qte' => 1,
-                // 'image' => $produit->image, // Ajout de l'image du produit
-            ]; // Ajouter un nouveau produit
+                'image' => $imagePath,
+            ];
         }
 
         Session::put('cart', $cart); // Sauvegarder le panier
         return back()->with('success', 'Produit ajouté au panier.');
     }
 
-    // Mettre à jour la quantité d'un produit
+
     public function updateCart(Request $request)
     {
         $validated = $request->validate([
@@ -57,6 +60,7 @@ class CartController extends Controller
 
         $cart = Session::get('cart', []);
 
+
         if (isset($cart[$validated['product_id']])) {
             $cart[$validated['product_id']]['qte'] = $validated['qte'];
             Session::put('cart', $cart);
@@ -65,7 +69,7 @@ class CartController extends Controller
 
         return back()->withErrors(['error' => 'Produit introuvable dans le panier.']);
     }
-     // Supprimer un produit du panier
+   
      public function removeFromCart($id)
      {
          $cart = Session::get('cart', []);
