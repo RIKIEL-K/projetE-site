@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\loginRequest;
+use App\Http\Requests\utilisateurFormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -40,5 +41,19 @@ class AuthController extends Controller
 
         return view ('connexion');
     }
+    public function sign(){
+        return view('inscriptionUser');
+    }
+        public function doSignIn(utilisateurFormRequest $request){
+            // Valider les données
+            $validatedData = $request->validated();
+          // Hash le mot de passe avant de le sauvegarder
+            $validatedData['password'] = Hash::make($validatedData['password']);
+
+            // Crée l'utilisateur
+            $user = User::create($validatedData);
+
+            return to_route('login')->with('success', "Utilisateur a été enrégistré avec succès");
+         }
 }
 

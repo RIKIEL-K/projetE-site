@@ -20,16 +20,19 @@
   <body>
     <!--Main Navigation-->
       <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Administration</a>
+          <a class="navbar-brand" href="#">WG</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-              <li class="nav-item">
+            <ul class="navbar-nav hstack gap-3">
+              {{-- <li class="nav-item">
                 <a class="nav-link" href="#"><i class="bi bi-cart3"></i></a>
+              </li> --}}
+              <li class="nav-item">
+                <a class="nav-link btn btn-warning bg-warning" href="#"><i class="bi bi-person-gear"></i></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link btn btn-light" href="{{route('admin.produit.index')}}">Produits</a>
@@ -48,7 +51,7 @@
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             @method('delete')
-                            <button type="submit" class="btn btn-danger">Déconnexion</button>
+                            <button type="submit" class="btn btn-danger"><i class="bi bi-box-arrow-left"></i></button>
                         </form>
                     @endauth
               </li>
@@ -56,7 +59,7 @@
           </div>
         </div>
       </nav>
-        <div class="container">
+        <div class="container mt-4">
             @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{session('success')}}

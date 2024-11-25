@@ -24,14 +24,14 @@
   <body>
     <!--Main Navigation-->
       <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">WG</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav hstack gap-3">
               <li class="nav-item">
                 <a href="{{ route('cart.view') }}" class="btn btn-light position-relative nav-link">
                     <i class="bi bi-cart3"></i>
@@ -49,12 +49,12 @@
                 <a class="nav-link btn btn-light" href="/">Nos produits</a>
               </li>
 
-              <li class="nav-item">
+              <li class="nav-item p-2">
                     @auth
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             @method('delete')
-                            <button type="submit" class="btn btn-danger">Déconnexion</button>
+                            <button type="submit" class="btn btn-danger"><i class="bi bi-box-arrow-left"></i></button>
                         </form>
                     @endauth
               </li>
