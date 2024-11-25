@@ -27,6 +27,7 @@
                             <div class="col-3 d-flex gap-2">
                                 <button type="submit" class="btn btn-primary"><i class="bi bi-arrow-clockwise"></i></button>
                                 </form>
+
                                 <form action="{{ route('cart.remove', $id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
@@ -52,10 +53,7 @@
                             <p class="mb-2">{{ $total }} €</p>
                         </div>
                         <div class="mt-3">
-                            <form action="" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-success w-100 shadow-0 mb-2"><i class="bi bi-credit-card-fill"></i></button>
-                            </form>
+                            <div id="paypal-button-container" class="mt-3"></div>
                             <a href="{{route('index')}}" class="btn btn-light w-100 border mt-2"><i class="bi bi-arrow-return-left"></i></a>
                         </div>
                     </div>
@@ -64,7 +62,41 @@
             <!-- Summary -->
         </div>
     </div>
+
 </section>
+
+<script>
+    // Initialiser les boutons PayPal
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            // Crée une commande avec le total
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: '{{ $total }}' // Utilise la variable Blade pour le prix total
+                    }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            // Capture le paiement
+            return actions.order.capture().then(function(details) {
+                alert('Paiement effectué par ' + details.payer.name.given_name);
+                // Redirige vers une route Laravel pour finaliser la commande
+                window.location.href = "{{ route('order.complete') }}";
+            });
+        },
+        onCancel: function(data) {
+            // Affiche un message si le paiement est annulé
+            alert('Paiement annulé.');
+        },
+        onError: function(err) {
+            // Gérer les erreurs
+            console.error('Erreur PayPal:', err);
+            alert('Une erreur est survenue lors du paiement.');
+        }
+    }).render('#paypal-button-container'); // Rendre les boutons dans l'élément spécifié
+</script>
 
 @endsection
 

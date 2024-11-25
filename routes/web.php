@@ -5,6 +5,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\OptionController;
+use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\produitController;
 use App\Http\Controllers\utilisateurController;
 use Illuminate\Support\Facades\Route;
@@ -30,4 +31,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
 });
 
+Route::get('/paywithpaypal', [PaypalController::class, 'payWithPaypal'])->name('paywithpaypal');
+Route::post('/paypal', [PaypalController::class, 'postPaymentWithPaypal'])->name('paypal');
+Route::get('/status', [PaypalController::class, 'getPaymentStatus'])->name('status');
+
+Route::get('/order-complete', [PaypalController::class, 'complete'])->name('order.complete');
 
