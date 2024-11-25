@@ -31,9 +31,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
 });
 
-Route::get('/paywithpaypal', [PaypalController::class, 'payWithPaypal'])->name('paywithpaypal');
-Route::post('/paypal', [PaypalController::class, 'postPaymentWithPaypal'])->name('paypal');
-Route::get('/status', [PaypalController::class, 'getPaymentStatus'])->name('status');
-
 Route::get('/order-complete', [PaypalController::class, 'complete'])->name('order.complete');
 
