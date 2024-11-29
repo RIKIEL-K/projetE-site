@@ -44,7 +44,7 @@
                 <a class="nav-link btn btn-light" href="{{route('admin.utilisateur.index')}}">Utilisateurs</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link btn btn-light" href="#">Commandes</a>
+                <a class="nav-link btn btn-light" href="{{route('commande.index')}}">Commandes</a>
               </li>
               <li class="nav-item">
                     @auth
@@ -61,8 +61,14 @@
       </nav>
         <div class="container mt-4">
             @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="alert alert-success alert-dismissible fade show mt-1" role="alert">
                 {{session('success')}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            @endif
+            @if (session('danger'))
+            <div class="alert alert-danger alert-dismissible fade show mt-1" role="alert">
+                {{session('danger')}}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>
             @endif

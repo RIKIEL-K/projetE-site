@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\OptionController;
@@ -31,6 +32,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
     Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
 });
-
+Route::get('/commande/index', [CommandeController::class, 'index'])->name('commande.index');
 Route::get('/order-complete', [PaypalController::class, 'complete'])->name('order.complete');
+
+Route::get('/commande/OnStoreCancelled', [CommandeController::class, 'OnStoreCancelled'])->name('commande.OnStoreCancelled');
+Route::get('/commande/OnStoreCompleted', [CommandeController::class, 'OnStoreCompleted'])->name('commande.OnStoreCompleted');
+
+Route::delete('/commande/supprimer/{id}', [CommandeController::class, 'supprimer'])->name('commande.supprimer');
 

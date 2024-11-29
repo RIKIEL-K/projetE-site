@@ -54,6 +54,7 @@ class AuthController extends Controller
             $user = User::create($validatedData);
 
             return to_route('login')->with('success', "Utilisateur a été enrégistré avec succès");
-         }
+    }
+
 }
 

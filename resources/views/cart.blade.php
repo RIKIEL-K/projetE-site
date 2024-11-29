@@ -83,12 +83,13 @@
             return actions.order.capture().then(function(details) {
                 alert('Paiement effectué par ' + details.payer.name.given_name);
                 // Redirige vers une route Laravel pour finaliser la commande
-                window.location.href = "{{ route('order.complete') }}";
+                window.location.href = "{{ route('commande.OnStoreCompleted') }}?total={{ $total }}";
             });
         },
         onCancel: function(data) {
             // Affiche un message si le paiement est annulé
             alert('Paiement annulé.');
+            window.location.href = "{{ route('commande.OnStoreCancelled') }}?total={{ $total }}";
         },
         onError: function(err) {
             // Gérer les erreurs

@@ -101,4 +101,13 @@ class utilisateurController extends Controller
         $user->delete();
         return redirect()->route('admin.utilisateur.index')->with('success', 'Utilisateur supprimé avec succès.');
     }
+    // Fonction pour initialiser le panier de l'utilisateur
+    private function initializeUserCart()
+    {
+        // Vérifier si l'utilisateur a un panier déjà existant en session
+        if (!session()->has('cart') || empty(session()->get('cart'))) {
+            // Créer un panier vide pour l'utilisateur si aucun panier n'existe
+            session()->put('cart', []);
+        }
+    }
 }
