@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\loginRequest;
-use App\Http\Requests\utilisateurFormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use App\Http\Requests\utilisateurFormRequest;
 
 
 class AuthController extends Controller
@@ -17,6 +18,21 @@ class AuthController extends Controller
         $credentials = $request->validated();
           if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            // Stocker les informations utilisateur dans la session
+            $user = Auth::user(); //recupere les infos sur l'utilisateur connecté et les stocke dans $user
+            $request->session()->put('user', [
+                'id' => $user->id,
+                'nom' => $user->nom,
+                'telephone' => $user->telephone,
+                'date_naissance' => $user->date_naissance,
+                'prenom' => $user->prenom,
+                'email' => $user->email,
+                'password'=>$user->password,
+            ]);
+            // Si l'utilisateur a déjà un panier, on le récupere
+            $cart = Session::get('cart', []);
+            //on l'ajoute à la session
+            $request->session()->put('cart', $cart);
             return redirect()->intended();
           } else {
             return back()->withErrors([
@@ -24,8 +40,11 @@ class AuthController extends Controller
                   ])->onlyInput('email');
           }
     }
-    public function logout(){
+    public function logout(Request $request){
         Auth::logout();
+        // Supprimer les données de session utilisateur et panier
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return to_route('login')->with('success','déconnexion reussi');
     }
     public function login(){

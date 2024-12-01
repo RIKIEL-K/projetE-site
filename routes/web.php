@@ -17,6 +17,8 @@ Route::prefix("/admin")->name("admin.")->middleware('auth')->group(function(){
     Route::resource("utilisateur",utilisateurController::class);
  });
 Route::get('/',[HomeController::class,'index'])->name('index');
+Route::get('/userInfo',[HomeController::class,'getUserInfo'])->name('userInfo')->middleware('auth');
+Route::post('/userInfo',[HomeController::class,'update'])->name('userInfo')->middleware('auth');
 Route::get('/produit/{id}',[ListingController::class,'show'])->name('produit.show');
 Route::get('/login',[AuthController::class,'login'])->middleware('guest')->name('login');
 Route::post('/login',[AuthController::class,'doLogin']);
