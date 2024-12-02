@@ -11,7 +11,7 @@ use App\Http\Controllers\produitController;
 use App\Http\Controllers\utilisateurController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix("/admin")->name("admin.")->middleware('auth')->group(function(){
+Route::prefix("/admin")->name("admin.")->middleware(['auth','role:admin'])->group(function(){
     Route::resource("produit",produitController::class);
     Route::resource("option",OptionController::class);
     Route::resource("utilisateur",utilisateurController::class);

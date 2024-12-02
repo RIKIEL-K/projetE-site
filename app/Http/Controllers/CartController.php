@@ -11,6 +11,7 @@ class CartController extends Controller
 
      public function viewCart()
      {
+        $user = Session::get('user', []);
         $cart = Session::get('cart', []);
         $total = array_sum(array_map(function ($item) {
             return $item['prix'] * $item['qte']; // Calcul du total
@@ -31,6 +32,8 @@ class CartController extends Controller
         $produit = Produit::findOrFail($id); // Vérifier si le produit existe
 
         $cart = Session::get('cart', []); // Récupérer le panier actuel
+        $user = Session::get('user', []);
+
 
         // Définir une image par défaut si l'image du produit n'existe pas
         $imagePath = $produit->image ? asset('storage/' . $produit->image->image_path) : asset('images/no-image.png');
@@ -59,6 +62,8 @@ class CartController extends Controller
         ]);
 
         $cart = Session::get('cart', []);
+        $user = Session::get('user', []);
+
 
 
         if (isset($cart[$validated['product_id']])) {
@@ -69,7 +74,7 @@ class CartController extends Controller
 
         return back()->withErrors(['error' => 'Produit introuvable dans le panier.']);
     }
-   
+
      public function removeFromCart($id)
      {
          $cart = Session::get('cart', []);

@@ -47,6 +47,9 @@
                 <a class="nav-link btn btn-light" href="{{route('commande.index')}}">Commandes</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link btn btn-info bg-info" href="{{route('index')}}"><i class="bi bi-skip-backward-fill"></i></a>
+              </li>
+              <li class="nav-item">
                     @auth
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf

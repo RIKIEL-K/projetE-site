@@ -28,12 +28,15 @@ class AuthController extends Controller
                 'prenom' => $user->prenom,
                 'email' => $user->email,
                 'password'=>$user->password,
+                'statut' => $user->statut, 
             ]);
             // Si l'utilisateur a déjà un panier, on le récupere
             $cart = Session::get('cart', []);
             //on l'ajoute à la session
             $request->session()->put('cart', $cart);
-            return redirect()->intended();
+
+
+             return redirect()->intended();
           } else {
             return back()->withErrors([
                      'email'=>'identifiant ou mot de passe incorrect',

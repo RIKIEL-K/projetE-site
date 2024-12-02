@@ -45,12 +45,20 @@
                     </span>
                 </a>
               </li>
+
               <li class="nav-item">
                 <a class="nav-link btn btn-light" href="/">Nos produits</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link btn btn-warning bg-warning" href="{{route('userInfo')}}"><i class="bi bi-person-bounding-box"></i></a>
               </li>
+              @if(session('user') && session('user')['statut'] == 1)
+              <li class="nav-item">
+                  <a href="{{ route('admin.produit.index') }}" class="btn btn-success bg-success nav-link">
+                    <i class="bi bi-house-gear-fill"></i>
+                  </a>
+              </li>
+          @endif
 
               <li class="nav-item p-2">
                     @auth
