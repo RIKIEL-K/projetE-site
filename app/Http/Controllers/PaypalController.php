@@ -8,6 +8,6 @@ class PaypalController extends Controller
 {
     public function complete()
     {
-        return view('completePaiement'); // Assurez-vous d'avoir une vue correspondante
+        return view('completePaiement'); 
     }
 }

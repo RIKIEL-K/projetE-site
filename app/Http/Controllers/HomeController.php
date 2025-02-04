@@ -13,9 +13,6 @@ use App\Http\Requests\utilisateurFormRequest;
 
 class HomeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
 
