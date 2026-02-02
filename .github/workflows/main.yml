@@ -26,7 +26,6 @@ jobs:
         with:
           # Cache Composer dependencies to speed up workflow
           path: ~/.composer/cache
-          # Calcule une clé de cache basée sur le fichier composer.lock
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
