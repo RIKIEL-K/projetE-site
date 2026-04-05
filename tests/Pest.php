@@ -12,7 +12,7 @@
 */
 
 pest()->extend(Tests\TestCase::class)
- // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');
 
 /*
@@ -41,7 +41,37 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+// Helper : creer un utilisateur simple
+function createUser(array $attributes = []): \App\Models\User
 {
-    // ..
+    return \App\Models\User::create(array_merge([
+        'nom'            => 'Dupont',
+        'prenom'         => 'Jean',
+        'email'          => 'jean@test.com',
+        'telephone'      => '0601020304',
+        'date_naissance' => '1990-01-01',
+        'password'       => bcrypt('password123'),
+        'statut'         => 0,
+    ], $attributes));
+}
+
+// Helper : creer un administrateur
+function createAdmin(array $attributes = []): \App\Models\User
+{
+    return createUser(array_merge([
+        'email'  => 'admin@test.com',
+        'statut' => 1,
+    ], $attributes));
+}
+
+// Helper : creer un produit
+function createProduit(array $attributes = []): \App\Models\Produit
+{
+    return \App\Models\Produit::create(array_merge([
+        'nom'          => 'Produit Test',
+        'description'  => 'Description du produit test',
+        'quantite'     => 10,
+        'prix_unitaire' => '29.99',
+        'sold'         => false,
+    ], $attributes));
 }
