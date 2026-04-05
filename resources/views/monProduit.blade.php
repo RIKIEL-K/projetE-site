@@ -34,10 +34,13 @@
 
                     <div class="d-flex">
                         <input class="form-control text-center me-3" disabled id="inputQuantity" type="num" value="{{$produit->quantite}}" style="max-width: 3rem" />
-                        <a href="{{route('addCart', $produit->id)}}" class="btn btn-outline-dark flex-shrink-0">
-                            <i class="bi-cart-fill me-1"></i>
-                            Add to cart
-                        </a>
+                        <form action="{{route('addCart', $produit->id)}}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-dark flex-shrink-0">
+                                <i class="bi-cart-fill me-1"></i>
+                                Ajouter au panier
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

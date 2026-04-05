@@ -16,67 +16,60 @@ class AuthController extends Controller
     public function doLogin(loginRequest $request){
 
         $credentials = $request->validated();
-          if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
             // Stocker les informations utilisateur dans la session
-            $user = Auth::user(); //recupere les infos sur l'utilisateur connecté et les stocke dans $user
+            // ne jamais stocker le hash du password en session
+            $user = Auth::user();
             $request->session()->put('user', [
-                'id' => $user->id,
-                'nom' => $user->nom,
-                'telephone' => $user->telephone,
+                'id'             => $user->id,
+                'nom'            => $user->nom,
+                'telephone'      => $user->telephone,
                 'date_naissance' => $user->date_naissance,
-                'prenom' => $user->prenom,
-                'email' => $user->email,
-                'password'=>$user->password,
-                'statut' => $user->statut, 
+                'prenom'         => $user->prenom,
+                'email'          => $user->email,
+                'statut'         => $user->statut,
             ]);
-            // Si l'utilisateur a déjà un panier, on le récupere
+
+            // Conserver le panier s'il existait avant la connexion
             $cart = Session::get('cart', []);
-            //on l'ajoute à la session
             $request->session()->put('cart', $cart);
 
-
-             return redirect()->intended();
-          } else {
+            return redirect()->intended();
+        } else {
             return back()->withErrors([
-                     'email'=>'identifiant ou mot de passe incorrect',
-                  ])->onlyInput('email');
-          }
+                'email' => 'Identifiant ou mot de passe incorrect',
+            ])->onlyInput('email');
+        }
     }
+
     public function logout(Request $request){
         Auth::logout();
-        // Supprimer les données de session utilisateur et panier
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return to_route('login')->with('success','déconnexion reussi');
+        return to_route('login')->with('success', 'Deconnexion reussie');
     }
-    public function login(){
-        // Exemple de création d'un utilisateur
-            // User::create([
-            //     'nom' => 'admin',
-            //     'prenom' => 'admin',
-            //     'email' => 'admin@admin.com',
-            //     'password' => Hash::make('admin12345'),
-            //     'telephone' => '123456789',
-            //     'date_naissance' => '1990-01-01',
-            // ]);
 
-        return view ('connexion');
+    public function login(){
+        return view('connexion');
     }
+
     public function sign(){
         return view('inscriptionUser');
     }
-        public function doSignIn(utilisateurFormRequest $request){
-            // Valider les données
-            $validatedData = $request->validated();
-          // Hash le mot de passe avant de le sauvegarder
-            $validatedData['password'] = Hash::make($validatedData['password']);
 
-            // Crée l'utilisateur
-            $user = User::create($validatedData);
+    public function doSignIn(utilisateurFormRequest $request){
+        $validatedData = $request->validated();
 
-            return to_route('login')->with('success', "Utilisateur a été enrégistré avec succès");
+        // Hash le mot de passe avant de le sauvegarder
+        $validatedData['password'] = Hash::make($validatedData['password']);
+
+        //forcer statut=0 pour empecher l'elevation de privileges via formulaire
+        $validatedData['statut'] = 0;
+
+        User::create($validatedData);
+
+        return to_route('login')->with('success', "Utilisateur enregistre avec succes");
     }
-
 }
-

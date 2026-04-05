@@ -37,9 +37,13 @@
 
                 <div class="d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
 
-                  <a href="{{ route('addCart', $produit->id) }}" class="btn btn-secondary me-1">
-                    <i class="bi bi-cart-plus"></i>
-                  </a>
+                  {{-- Formulaire POST pour l'ajout au panier (securise par CSRF + auth middleware) --}}
+                  <form action="{{ route('addCart', $produit->id) }}" method="POST" class="me-1">
+                    @csrf
+                    <button type="submit" class="btn btn-secondary">
+                      <i class="bi bi-cart-plus"></i>
+                    </button>
+                  </form>
 
                   <a href="{{ route('produit.show', $produit->id) }}" class="btn btn-secondary shadow-0 me-1">
                     <i class="bi bi-eye"></i>

@@ -26,7 +26,7 @@ class CheckRole
 
         // Vérifier les rôles
         if ($role === 'admin' && $user->statut != 1) {
-            return redirect()->route('admin.produit.index')->withErrors('Accès refusé.');
+            return redirect()->route('index')->withErrors('Accès refusé : vous n\'êtes pas administrateur.');
         }
 
         if ($role === 'user' && $user->statut != 0) {

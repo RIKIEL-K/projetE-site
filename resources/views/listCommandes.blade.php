@@ -33,7 +33,7 @@
                 <td><span class="badge rounded-pill text-bg-primary {{ $commande->status  == 'echoué' ? 'text-bg-danger' : 'text-bg-primary' }}">{{$commande->status}}</span></td>
 
                 <td>
-                    <form action="{{ route('commande.supprimer', $commande->id) }}" method="POST">
+                    <form action="{{ route('admin.commande.supprimer', $commande->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash3"></i></button>

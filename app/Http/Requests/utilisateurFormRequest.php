@@ -22,17 +22,22 @@ class utilisateurFormRequest extends FormRequest
      */
     public function rules(): array
     {
+        // En modification (PUT/PATCH), le mot de passe est optionnel
+        $passwordRule = ($this->isMethod('PUT') || $this->isMethod('PATCH'))
+            ? ['nullable', 'min:6']
+            : ['required', 'min:6'];
+
         return [
-            'nom'=>['required','min:2'],
-            'prenom'=>['required','min:2'],
-            'telephone'=>['required'],
-            'email' => [
-            'required',
-            Rule::unique('users')->ignore($this->route()->parameter('utilisateur')) // Validation unique sauf pour l'utilisateur actuel
+            'nom'            => ['required', 'min:2'],
+            'prenom'         => ['required', 'min:2'],
+            'telephone'      => ['required'],
+            'email'          => [
+                'required',
+                Rule::unique('users')->ignore($this->route()->parameter('utilisateur'))
             ],
-            'date_naissance'=>['required'],
-            'statut'=>['nullable','boolean'],
-            'password' => ['required', 'min:6'],
+            'date_naissance' => ['required'],
+            'statut'         => ['nullable', 'boolean'],
+            'password'       => $passwordRule,
         ];
     }
 }

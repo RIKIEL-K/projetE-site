@@ -18,8 +18,6 @@
     ></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <script src="https://www.paypal.com/sdk/js?client-id=AV8mC4qL2VW0FE1dh7N6aVh8VDyK_Q4y17GCJCe6jScWuvtl2h12RZiLcbiPIWmytljsfDsVPJXNkfRf&currency=CAD"></script>
-
   </head>
   <body>
     <!--Main Navigation-->
@@ -49,9 +47,11 @@
               <li class="nav-item">
                 <a class="nav-link btn btn-light" href="/">Nos produits</a>
               </li>
+              @auth
               <li class="nav-item">
                 <a class="nav-link btn btn-warning bg-warning" href="{{route('userInfo')}}"><i class="bi bi-person-bounding-box"></i></a>
               </li>
+              @endauth
               @if(session('user') && session('user')['statut'] == 1)
               <li class="nav-item">
                   <a href="{{ route('admin.produit.index') }}" class="btn btn-success bg-success nav-link">
@@ -85,6 +85,16 @@
                 {{session('danger')}}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>
+            @endif
+            @if ($errors->any())
+            <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
             @endif
         </div>
 

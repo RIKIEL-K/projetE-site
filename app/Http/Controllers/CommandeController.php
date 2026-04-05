@@ -3,93 +3,106 @@
 namespace App\Http\Controllers;
 
 use App\Models\Commande;
+use App\Models\Produit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class CommandeController extends Controller
 {
-
+    /**
+     * Liste des commandes (admin uniquement — protege par role:admin dans routes)
+     */
     public function index(){
-
-    $commandes = Commande::with('user', 'items')->get(); // Récupère toutes les commandes avec les détails
-    return view('listCommandes', [
-        'commandes'=>$commandes
-    ]);
-
+        $commandes = Commande::with('user', 'items')->get();
+        return view('listCommandes', ['commandes' => $commandes]);
     }
+
+    /**
+     * Commande validee par PayPal
+     * le total est recalcule cote serveur depuis la session,
+     *               jamais depuis les parametres GET/POST du client.
+     */
     public function OnStoreCompleted(Request $request){
 
-        // Vérifiez si le panier est vide dans la session
         if (!Session::has('cart') || empty(Session::get('cart'))) {
             return redirect()->route('index');
         }
 
-        // Crée une nouvelle commande pour l'utilisateur
-        $order = Commande::create([
-            'user_id' => Auth::id(),            // Associe la commande à l'utilisateur connecté
-            'total' => $request->input('total'), // Total de la commande (fournir via le formulaire ou calculé)
-            'status' => 'terminé',               // Statut initial de la commande
-        ]);
-
         $cart = Session::get('cart');
 
-        // Créer les items de la commande
+        // Recalcul du total cote serveur
+        $total = array_sum(array_map(function ($item) {
+            return $item['prix'] * $item['qte'];
+        }, $cart));
+
+        $order = Commande::create([
+            'user_id' => Auth::id(),
+            'total'   => $total,
+            'status'  => 'termine',
+        ]);
+
         foreach ($cart as $id => $item) {
             $order->items()->create([
-                'produit_id' => $id,        // ID du produit
-                'quantite' => $item['qte'], // Quantité commandée
-                'prix' => $item['prix'],    // Prix unitaire
+                'produit_id' => $id,
+                'quantite'   => $item['qte'],
+                'prix'       => $item['prix'],
             ]);
+
+            // Decrementer le stock
+            $produit = Produit::find($id);
+            if ($produit) {
+                $produit->quantite = max(0, $produit->quantite - $item['qte']);
+                $produit->save();
+            }
         }
-         // Vider le panier après la commande
-         Session::forget('cart');
 
-         return redirect()->route('index')->with('success', 'Commande passée avec succès!');
+        Session::forget('cart');
 
+        return redirect()->route('index')->with('success', 'Commande passee avec succes !');
     }
+
+    /**
+     * Paiement annule — on enregistre la commande comme echouee mais on garde le panier
+     */
     public function OnStoreCancelled(Request $request){
 
-        $request->validate([
-            'total' => 'required|numeric|min:0',
-        ]);
-
-        // Vérifiez si le panier est vide dans la session
         if (!Session::has('cart') || empty(Session::get('cart'))) {
             return redirect()->route('index');
         }
 
-        // Crée une nouvelle commande pour l'utilisateur
-        $order = Commande::create([
-            'user_id' => Auth::id(),            // Associe la commande à l'utilisateur connecté
-            'total' => $request->input('total'), // Total de la commande (fournir via le formulaire ou calculé)
-            'status' => 'echoué',               // Statut initial de la commande
-        ]);
-
         $cart = Session::get('cart');
 
-        // Créer les items de la commande
+        // Recalcul du total cote serveur
+        $total = array_sum(array_map(function ($item) {
+            return $item['prix'] * $item['qte'];
+        }, $cart));
+
+        $order = Commande::create([
+            'user_id' => Auth::id(),
+            'total'   => $total,
+            'status'  => 'echoue',
+        ]);
+
         foreach ($cart as $id => $item) {
             $order->items()->create([
-                'produit_id' => $id,        // ID du produit
-                'quantite' => $item['qte'], // Quantité commandée
-                'prix' => $item['prix'],    // Prix unitaire
+                'produit_id' => $id,
+                'quantite'   => $item['qte'],
+                'prix'       => $item['prix'],
             ]);
         }
 
-         return redirect()->route('cart.view')->with('danger', 'Commande echoué!');
-
+        // Le panier est conserve pour que l'utilisateur puisse reessayer
+        return redirect()->route('cart.view')->with('danger', 'Paiement annule. Votre panier est conserve.');
     }
 
+    /**
+     * Supprimer une commande (admin uniquement — protege par role:admin dans routes)
+     */
     public function supprimer(string $id){
-
         $commande = Commande::findOrFail($id);
-
-        // Supprimer les items associés à la commande
-         $commande->items()->delete();
-
+        $commande->items()->delete();
         $commande->delete();
-        return redirect()->route('commande.index')->with('success', 'Commande supprimée avec succès.');
+        return redirect()->route('admin.commande.index')->with('success', 'Commande supprimee avec succes.');
     }
-
 }

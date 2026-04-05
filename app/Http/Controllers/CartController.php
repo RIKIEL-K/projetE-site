@@ -32,8 +32,12 @@ class CartController extends Controller
         $produit = Produit::findOrFail($id); // Vérifier si le produit existe
 
         $cart = Session::get('cart', []); // Récupérer le panier actuel
-        $user = Session::get('user', []);
 
+        // Vérifier le stock disponible
+        $qteDejaAuPanier = isset($cart[$id]) ? $cart[$id]['qte'] : 0;
+        if ($produit->quantite <= 0 || $qteDejaAuPanier >= $produit->quantite) {
+            return back()->withErrors(['stock' => 'Stock insuffisant pour ce produit.']);
+        }
 
         // Définir une image par défaut si l'image du produit n'existe pas
         $imagePath = $produit->image ? asset('storage/' . $produit->image->image_path) : asset('images/no-image.png');
@@ -42,9 +46,9 @@ class CartController extends Controller
             $cart[$id]['qte'] += 1; // Augmenter la quantité
         } else {
             $cart[$id] = [
-                'name' => $produit->nom,
-                'prix' => $produit->prix_unitaire,
-                'qte' => 1,
+                'name'  => $produit->nom,
+                'prix'  => $produit->prix_unitaire,
+                'qte'   => 1,
                 'image' => $imagePath,
             ];
         }

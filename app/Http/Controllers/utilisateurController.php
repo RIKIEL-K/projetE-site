@@ -78,14 +78,18 @@ class utilisateurController extends Controller
 
         $user = User::findOrFail($id);
 
-        $user->nom = $validated['nom'];
-        $user->prenom = $validated['prenom'];
-         $user->telephone = $validated['telephone'];
-        $user->email = $validated['email'];
+        $user->nom            = $validated['nom'];
+        $user->prenom         = $validated['prenom'];
+        $user->telephone      = $validated['telephone'];
+        $user->email          = $validated['email'];
         $user->date_naissance = $validated['date_naissance'];
-         // Gérer le statut : si absent, définir comme 0
-        $user->statut = $request->has('statut') ? $validated['statut'] : 0;
-        $user->password = $validated['password'];
+        // Gérer le statut : si absent, définir comme 0
+        $user->statut = $request->has('statut') ? 1 : 0;
+
+        // Mot de passe optionnel en modification : hasher explicitement si fourni
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
 
         $user->save();
 
@@ -97,17 +101,13 @@ class utilisateurController extends Controller
      */
     public function destroy(string $id)
     {
+        // Empêcher l'admin de supprimer son propre compte
+        if (auth()->id() == $id) {
+            return redirect()->route('admin.utilisateur.index')->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
+        }
+
         $user = User::findOrFail($id);
         $user->delete();
         return redirect()->route('admin.utilisateur.index')->with('success', 'Utilisateur supprimé avec succès.');
-    }
-    // Fonction pour initialiser le panier de l'utilisateur
-    private function initializeUserCart()
-    {
-        // Vérifier si l'utilisateur a un panier déjà existant en session
-        if (!session()->has('cart') || empty(session()->get('cart'))) {
-            // Créer un panier vide pour l'utilisateur si aucun panier n'existe
-            session()->put('cart', []);
-        }
     }
 }
